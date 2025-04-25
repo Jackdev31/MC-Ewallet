@@ -17,7 +17,6 @@
                     </a>
                 </li>
                 @canany(['view permissions', 'view users', 'view roles'])
-
                     <li class="pc-item pc-caption">
                         <label>System</label>
                         <i class="ti ti-dashboard"></i>
@@ -37,7 +36,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            
+
                             @can('view permissions')
                                 <li class="pc-item">
                                     <a href="{{ route('permissions.index') }}" class="pc-link">
@@ -55,6 +54,48 @@
                                     </a>
                                 </li>
                             @endcan
+                        </ul>
+                    </li>
+                @endcanany
+
+                @canany(['view product category','view products'])
+                    <li class="pc-item pc-caption">
+                        <label>Product Management</label>
+                        <i class="ti ti-package"></i>
+                    </li>
+                    <li class="pc-item pc-hasmenu">
+                        <a href="javascript:void(0);" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-box"></i></span>
+                            <span class="pc-mtext">Product Management</span>
+                            <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            @can('view product category')
+                                <li class="pc-item">
+                                    <a href="{{ route('product-categories.index') }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-package"></i></span>
+                                        <span class="pc-mtext">Product Category</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('view products')
+                                <li class="pc-item">
+                                    <a href="{{ route('products.index') }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-lock"></i></span>
+                                        <span class="pc-mtext">Products</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            {{-- @can('view roles')
+                                <li class="pc-item">
+                                    <a href="{{ route('roles.index') }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-shield"></i></span>
+                                        <span class="pc-mtext">Role Management</span>
+                                    </a>
+                                </li>
+                            @endcan --}}
                         </ul>
                     </li>
                 @endcanany
@@ -140,7 +181,7 @@
                         <img src="{{ asset('admin_assets/images/img-navbar-card.png') }}" alt="images"
                             class="img-fluid mb-2">
                         <h5>Template Made by</h5>
-                        <p>Jackdev🧡</p>
+                        <p>JackDev31🧡</p>
                         {{-- <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank" class="btn btn-success">Buy Now</a> --}}
                     </div>
                 </div>

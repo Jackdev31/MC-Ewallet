@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -88,6 +90,61 @@ Route::middleware('auth')->group(function () {
 
     // Delete a user
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+    // ProductCategory Routes
+
+    // List all product categories
+    Route::get('/product-categories', [ProductCategoryController::class, 'index'])
+        ->name('product-categories.index');
+
+    // Show the form to create a new product category
+    Route::get('/product-categories/create', [ProductCategoryController::class, 'create'])
+        ->name('product-categories.create');
+
+    // Store a new product category
+    Route::post('/product-categories', [ProductCategoryController::class, 'store'])
+        ->name('product-categories.store');
+
+    // Show a specific product category
+    Route::get('/product-categories/{productCategory}', [ProductCategoryController::class, 'show'])
+        ->name('product-categories.show');
+
+    // Show the form to edit an existing product category
+    Route::get('/product-categories/{productCategory}/edit', [ProductCategoryController::class, 'edit'])
+        ->name('product-categories.edit');
+
+    // Update an existing product category
+    Route::put('/product-categories/{productCategory}', [ProductCategoryController::class, 'update'])
+        ->name('product-categories.update');
+
+    // Delete a product category
+    Route::delete('/product-categories/{productCategory}', [ProductCategoryController::class, 'destroy'])
+        ->name('product-categories.destroy');
+
+
+    // List all products
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
+    // Show form to create a new product
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+
+    // Store a new product
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+    // Show a specific product
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+    // Show form to edit a specific product
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+
+    // Update a specific product
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
+    // Delete a specific product
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+
 });
 
 require __DIR__ . '/auth.php';

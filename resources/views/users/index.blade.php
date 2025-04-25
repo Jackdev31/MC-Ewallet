@@ -15,7 +15,7 @@
             <div
                 class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
                 <h3 class="card-title mb-0">Users</h3>
-                @can('create user')
+                @can('create users')
                     <a href="{{ route('users.create') }}" class="btn btn-primary">
                         <i class="ti ti-user-plus fs-6"></i> Create User
                     </a>
