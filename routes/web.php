@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CashierSaleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
@@ -144,6 +145,8 @@ Route::middleware('auth')->group(function () {
     // Delete a specific product
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
+    // List all products
+    Route::get('/cashiersales', [CashierSaleController::class, 'index'])->name('cashiersales.index');
 
 });
 

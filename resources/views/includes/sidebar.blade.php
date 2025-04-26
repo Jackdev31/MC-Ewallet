@@ -58,7 +58,7 @@
                     </li>
                 @endcanany
 
-                @canany(['view product category','view products'])
+                @canany(['view product category', 'view products'])
                     <li class="pc-item pc-caption">
                         <label>Product Management</label>
                         <i class="ti ti-package"></i>
@@ -88,6 +88,7 @@
                                 </li>
                             @endcan
 
+
                             {{-- @can('view roles')
                                 <li class="pc-item">
                                     <a href="{{ route('roles.index') }}" class="pc-link">
@@ -100,8 +101,30 @@
                     </li>
                 @endcanany
 
+                @canany('sell products')
+                    <li class="pc-item pc-caption">
+                        <label>POS System</label>
+                        <i class="ti ti-package"></i>
+                    </li>
+                    <li class="pc-item pc-hasmenu">
+                        <a href="javascript:void(0);" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-box"></i></span>
+                            <span class="pc-mtext">Product Management</span>
+                            <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            @can('sell products')
+                                <li class="pc-item">
+                                    <a href="{{ route('cashiersales.index') }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-package"></i></span>
+                                        <span class="pc-mtext">Products</span>
+                                    </a>
+                                </li>
+                            @endcan
+                        @endcanany
 
-                {{-- <li class="pc-item pc-caption">
+
+                        {{-- <li class="pc-item pc-caption">
                     <label>Pages</label>
                     <i class="ti ti-news"></i>
                 </li>
@@ -176,15 +199,15 @@
                 </li>
             </ul> --}}
 
-                <div class="card text-center">
-                    <div class="card-body">
-                        <img src="{{ asset('admin_assets/images/img-navbar-card.png') }}" alt="images"
-                            class="img-fluid mb-2">
-                        <h5>Template Made by</h5>
-                        <p>JackDev31🧡</p>
-                        {{-- <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank" class="btn btn-success">Buy Now</a> --}}
-                    </div>
-                </div>
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <img src="{{ asset('admin_assets/images/img-navbar-card.png') }}" alt="images"
+                                    class="img-fluid mb-2">
+                                <h5>Template Made by</h5>
+                                <p>JackDev31🧡</p>
+                                {{-- <a href="https://codedthemes.com/item/berry-bootstrap-5-admin-template/" target="_blank" class="btn btn-success">Buy Now</a> --}}
+                            </div>
+                        </div>
         </div>
     </div>
 </nav>
