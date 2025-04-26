@@ -145,8 +145,14 @@ Route::middleware('auth')->group(function () {
     // Delete a specific product
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-    // List all products
-    Route::get('/cashiersales', [CashierSaleController::class, 'index'])->name('cashiersales.index');
+
+    
+    Route::get('/cashierpos', [CashierSaleController::class, 'index'])->name('cashierpos.index');
+
+    Route::post('/store-cashier-sales', [CashierSaleController::class, 'store'])->name('store.cashier.sales');
+
+    Route::get('/sales-transactions', [CashierSaleController::class, 'sales'])->name('sales.transactions');
+
 
 });
 

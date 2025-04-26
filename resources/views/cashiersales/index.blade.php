@@ -3,12 +3,10 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            {{-- Left Side: Product Catalog --}}
+            {{-- Product Catalog --}}
             <div class="col-md-8">
                 <h4>Product Catalog</h4>
-
-                {{-- Category Filter --}}
-                <div class="mb-4">
+                <div class="mb-3">
                     <h6>Filter by Category:</h6>
                     <div class="btn-group flex-wrap" role="group">
                         <button class="btn btn-outline-primary btn-sm active" data-category="all">All</button>
@@ -23,16 +21,15 @@
                 <div class="row">
                     @foreach ($products as $product)
                         <div class="col-md-4 mb-4 product-card" data-category="{{ $product->product_category_id }}">
-                            <div class="card h-100 shadow-sm border-light rounded">
+                            <div class="card h-100">
                                 <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->name }}"
-                                    class="card-img-top" style="object-fit: cover; height: 200px; width: 100%;"
-                                    onerror="this.onerror=null; this.src='{{ asset('images/default.png') }}';">
-
+                                    class="card-img-top" style="object-fit: cover; height: 200px;"
+                                    onerror="this.onerror=null;this.src='{{ asset('images/default.png') }}';">
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <div>
-                                        <h5 class="card-title">{{ $product->name }}</h5>
-                                        <p class="card-text">₱{{ number_format($product->price, 2) }}</p>
-                                        <p class="card-text">Qty: {{ $product->quantity }}</p>
+                                        <h5>{{ $product->name }}</h5>
+                                        <p>₱{{ number_format($product->price, 2) }}</p>
+                                        <p>Qty: {{ $product->quantity }}</p>
                                     </div>
                                     <button class="btn btn-success btn-sm mt-auto add-to-checkout-btn"
                                         data-id="{{ $product->id }}" data-name="{{ $product->name }}"
@@ -47,7 +44,7 @@
                 </div>
             </div>
 
-            {{-- Right Side: Checkout Overview --}}
+            {{-- Checkout Overview --}}
             <div class="col-md-4">
                 <h4>Checkout Overview</h4>
                 <div class="card">
@@ -63,33 +60,71 @@
             </div>
         </div>
     </div>
+
+    {{-- Receipt Modal --}}
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Checkout Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="receipt-list" class="list-group mb-3"></ul>
+                    <h5>Total: ₱<span id="receipt-total">0.00</span></h5>
+
+                    <div class="mb-3">
+                        <label for="payment-method" class="form-label">Payment Method</label>
+                        <select class="form-select" id="payment-method">
+                            <option value="Cash" selected>Cash</option>
+                            <option value="E-wallet">E-wallet</option>
+                        </select>
+                    </div>
+
+                    <div id="cash-input-container" class="mb-3">
+                        <label for="cash-paid" class="form-label">Cash Paid</label>
+                        <input type="number" class="form-control" id="cash-paid" placeholder="Enter cash amount">
+                    </div>
+
+                    <div id="qr-container" class="text-center mt-3" style="display: none;">
+                        <label class="form-label">Scan QR to Pay</label>
+                        <div id="qrcode" class="d-inline-block p-2 border rounded bg-light"
+                            style="width: 200px; height: 200px;"></div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirm-payment-btn">Confirm Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         let checkoutItems = [];
 
         document.querySelectorAll('.add-to-checkout-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const productId = this.dataset.id;
-                const productName = this.dataset.name;
-                const productPrice = parseFloat(this.dataset.price);
-                const productImage = this.dataset.image;
+                const id = this.dataset.id;
+                const name = this.dataset.name;
+                const price = parseFloat(this.dataset.price);
+                const image = this.dataset.image;
 
-                const existingItem = checkoutItems.find(item => item.id === productId);
-
-                if (existingItem) {
-                    existingItem.quantity += 1;
+                const existing = checkoutItems.find(item => item.id == id);
+                if (existing) {
+                    existing.quantity += 1;
                 } else {
                     checkoutItems.push({
-                        id: productId,
-                        name: productName,
-                        price: productPrice,
-                        image: productImage,
+                        id,
+                        name,
+                        price,
+                        image,
                         quantity: 1
                     });
                 }
-
                 renderCheckout();
             });
         });
@@ -101,24 +136,21 @@
 
             checkoutItems.forEach((item, index) => {
                 total += item.price * item.quantity;
-
                 list.innerHTML += `
-                    <li class="list-group-item d-flex align-items-center gap-3">
-                        <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px;">
-                        <div class="flex-grow-1">
-                            <strong>${item.name}</strong><br>
-                            <div class="input-group input-group-sm mt-1" style="width: 120px;">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="updateQty(${index}, -1)">−</button>
-                                <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                                <button class="btn btn-outline-secondary btn-sm" onclick="updateQty(${index}, 1)">+</button>
-                            </div>
+                <li class="list-group-item d-flex align-items-center">
+                    <img src="${item.image}" alt="${item.name}" style="width:40px;height:40px;object-fit:cover;border-radius:5px;margin-right:10px;">
+                    <div class="flex-grow-1">
+                        <strong>${item.name}</strong>
+                        <div class="input-group input-group-sm mt-1" style="max-width: 120px;">
+                            <button class="btn btn-outline-secondary" onclick="updateQty(${index}, -1)">−</button>
+                            <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
+                            <button class="btn btn-outline-secondary" onclick="updateQty(${index}, 1)">+</button>
                         </div>
-                        <span class="text-end fw-bold">₱${(item.price * item.quantity).toFixed(2)}</span>
-                        <button class="btn btn-danger btn-sm ms-2" onclick="removeItem(${index})">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </li>
-                `;
+                    </div>
+                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                    <button class="btn btn-danger btn-sm ms-2" onclick="removeItem(${index})"><i class="ti ti-trash"></i></button>
+                </li>
+            `;
             });
 
             document.getElementById('checkout-total').innerText = total.toFixed(2);
@@ -139,39 +171,105 @@
 
         document.getElementById('checkout-btn').addEventListener('click', function() {
             if (checkoutItems.length === 0) {
-                alert("Your checkout list is empty!");
+                alert("No items to checkout.");
                 return;
             }
-
-            // Replace this with AJAX request if needed
-            console.log("Submitting checkout:", checkoutItems);
-            alert("Checkout logic goes here.");
+            renderReceipt();
+            new bootstrap.Modal(document.getElementById('receiptModal')).show();
         });
 
         document.getElementById('cancel-btn').addEventListener('click', function() {
-            checkoutItems = [];
-            renderCheckout();
+            if (confirm('Clear all checkout items?')) {
+                checkoutItems = [];
+                renderCheckout();
+            }
         });
 
-        // Category Filter Logic
-        document.querySelectorAll('.btn[data-category]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const selected = this.dataset.category;
-
-                // Toggle active class on buttons
-                document.querySelectorAll('.btn[data-category]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                // Show/hide product cards
-                document.querySelectorAll('.product-card').forEach(card => {
-                    const cardCategory = card.getAttribute('data-category');
-                    if (selected === 'all' || selected === cardCategory) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+        function renderReceipt() {
+            const list = document.getElementById('receipt-list');
+            list.innerHTML = '';
+            let total = 0;
+            checkoutItems.forEach(item => {
+                total += item.price * item.quantity;
+                list.innerHTML += `<li class="list-group-item d-flex justify-content-between">
+                <span>${item.name} × ${item.quantity}</span><span>₱${(item.price * item.quantity).toFixed(2)}</span>
+            </li>`;
             });
+            document.getElementById('receipt-total').innerText = total.toFixed(2);
+        }
+
+        document.getElementById('payment-method').addEventListener('change', generateQRCode);
+
+        function generateQRCode() {
+            const method = document.getElementById('payment-method').value;
+            const cashInput = document.getElementById('cash-input-container');
+            const qrContainer = document.getElementById('qr-container');
+
+            if (method === 'Cash') {
+                cashInput.style.display = 'block';
+                qrContainer.style.display = 'none';
+            } else {
+                cashInput.style.display = 'none';
+                qrContainer.style.display = 'block';
+
+                const qrDiv = document.getElementById('qrcode');
+                qrDiv.innerHTML = '';
+                const amount = document.getElementById('receipt-total').innerText;
+                const qrText = `pay:${amount}`; // avoid ₱ symbol
+                new QRCode(qrDiv, {
+                    text: qrText,
+                    width: 200,
+                    height: 200,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            }
+        }
+
+        document.getElementById('confirm-payment-btn').addEventListener('click', function() {
+            const method = document.getElementById('payment-method').value;
+            const total = parseFloat(document.getElementById('receipt-total').innerText);
+
+            if (method === 'Cash') {
+                const cashPaid = parseFloat(document.getElementById('cash-paid').value);
+                if (isNaN(cashPaid) || cashPaid < total) {
+                    alert('Insufficient cash paid.');
+                    return;
+                }
+                const change = cashPaid - total;
+
+                const productData = checkoutItems.map(item => ({
+                    product_id: item.id,
+                    quantity: item.quantity,
+                    total_price: item.price * item.quantity
+                }));
+
+                fetch('{{ route('store.cashier.sales') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                        body: JSON.stringify({
+                            products: productData,
+                            total_price: total
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Payment confirmed! Change: ₱${change.toFixed(2)}`);
+                            checkoutItems = [];
+                            renderCheckout();
+                            bootstrap.Modal.getInstance(document.getElementById('receiptModal')).hide();
+                        } else {
+                            alert('Payment failed. Please try again.');
+                        }
+                    });
+            } else {
+                alert('E-wallet payment initiated. Please confirm manually.');
+                // Extend with actual e-wallet integration as needed
+            }
         });
     </script>
 @endpush

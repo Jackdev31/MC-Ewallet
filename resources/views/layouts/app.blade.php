@@ -13,7 +13,9 @@
     <link rel="icon" href="{{ asset('admin_assets/images/favicon.svg') }}" type="image/x-icon">
 
     <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" id="main-font-link">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        id="main-font-link">
     <link rel="stylesheet" href="{{ asset('admin_assets/fonts/tabler-icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin_assets/fonts/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('admin_assets/fonts/fontawesome.css') }}">
@@ -25,6 +27,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- QRCode.js (Add this for QR code generation) -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
     {{-- Styles pushed from child views --}}
     @stack('styles')
@@ -68,4 +73,5 @@
     {{-- Scripts pushed from child views --}}
     @stack('scripts')
 </body>
+
 </html>

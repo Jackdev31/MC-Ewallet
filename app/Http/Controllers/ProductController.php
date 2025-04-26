@@ -92,5 +92,21 @@ class ProductController extends Controller implements HasMiddleware
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
     }
+
+    public function updateQuantities(Request $request)
+    {
+        $products = $request->input('products');
+
+        foreach ($products as $productData) {
+            $product = Product::find($productData['product_id']);
+            if ($product) {
+                // Deduct the quantity from the database
+                $product->quantity -= $productData['quantity'];
+                $product->save();
+            }
+        }
+
+        return response()->json(['success' => true]);
+    }
 }
 
