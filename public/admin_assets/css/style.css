@@ -15987,7 +15987,9 @@ pre[class*=language-] > code {
 }
 .pc-sidebar .navbar-wrapper {
   width: 260px;
-  background: inherit;
+  /* background: inherit; */
+  background: #78B3CE;
+  /* link ja */
 }
 .pc-sidebar ul {
   list-style: none;
@@ -16054,6 +16056,8 @@ pre[class*=language-] > code {
   position: relative;
   font-size: 14px;
   font-weight: 400;
+  
+ 
 }
 .pc-sidebar .pc-link:focus, .pc-sidebar .pc-link.active, .pc-sidebar .pc-link:hover {
   text-decoration: none;
@@ -16070,10 +16074,13 @@ pre[class*=language-] > code {
 .pc-sidebar .pc-navbar > .pc-item.active > .pc-link {
   font-weight: 500;
   color: var(--pc-sidebar-active-color);
+ 
 }
 .pc-sidebar .pc-navbar > .pc-item.active > .pc-link:before {
   opacity: 0;
   background: var(--pc-sidebar-active-color);
+  
+  
 }
 .pc-sidebar .pc-navbar > .pc-item.active:not(.pc-hasmenu) > .pc-link::after {
   content: "";
@@ -16083,13 +16090,17 @@ pre[class*=language-] > code {
   width: 2px;
   height: 100%;
   background: var(--pc-sidebar-active-color);
+  
+  
 }
 .pc-sidebar .pc-navbar > .pc-item.active:not(.pc-hasmenu) > .pc-link:before {
   opacity: 0.1;
   background: var(--pc-sidebar-active-color);
+  
 }
 .pc-sidebar .pc-navbar > .pc-item:hover:not(.active) > .pc-link:before {
   background: var(--pc-sidebar-color);
+  
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item > .pc-link::before {
   content: "";
@@ -16099,6 +16110,7 @@ pre[class*=language-] > code {
   left: 0px;
   bottom: 0px;
   opacity: 0.05;
+  
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item > .pc-link:after {
   content: "";
@@ -16108,9 +16120,13 @@ pre[class*=language-] > code {
   width: 2px;
   height: 100%;
   transition: all 0.08s cubic-bezier(0.37, 0.24, 0.53, 0.99);
+  
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.pc-trigger > .pc-link, .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item.active > .pc-link {
   font-weight: 500;
+  background: #FBA518;
+  
+  /* link ja */
 }
 .pc-sidebar .pc-navbar > .pc-item .pc-submenu .pc-item:hover > .pc-link {
   color: var(--pc-sidebar-color);
@@ -16381,6 +16397,7 @@ pre[class*=language-] > code {
 .layout-2 .pc-header {
   position: absolute;
   background: transparent;
+
 }
 .layout-2 .pc-header .pc-head-link::before {
   background: rgba(255, 255, 255, 0.15);
@@ -16431,7 +16448,9 @@ pre[class*=language-] > code {
 }
 
 .pc-header {
-  background: var(--pc-header-background);
+  /* background: var(--pc-header-background); */
+    background: #FBA518;
+    /* link ja */
   color: var(--pc-header-color);
   min-height: 60px;
   box-shadow: var(--pc-header-shadow);

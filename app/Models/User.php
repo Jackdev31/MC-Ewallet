@@ -56,4 +56,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Permission::class);
     }
+    public function ewallet()
+    {
+        return $this->hasOne(Ewallet::class);
+    }
 }

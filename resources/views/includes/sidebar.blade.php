@@ -5,7 +5,7 @@
                 <img src="{{ asset('admin_assets/images/logo-dark.svg') }}" class="img-fluid logo-lg" alt="logo">
             </a>
         </div>
-        
+
         <div class="navbar-content">
             <ul class="pc-navbar">
                 <!-- Dashboard Link -->
@@ -116,21 +116,87 @@
                             @endcan
 
                             @can('view cashier sales')
-                            <li class="pc-item">
-                                <a href="{{ route('sales.transactions') }}" class="pc-link">
-                                    <span class="pc-micon"><i class="ti ti-package"></i></span>
-                                    <span class="pc-mtext">Cashier Sales</span>
-                                </a>
-                            </li>
-                        @endcan
+                                <li class="pc-item">
+                                    <a href="{{ route('sales.transactions') }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-package"></i></span>
+                                        <span class="pc-mtext">Cashier Sales</span>
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan
 
+                <!-- E-wallet System Section -->
+                @canany(['view e-wallets', 'load e-wallets', 'view load transactions'])
+                    <li class="pc-item pc-caption">
+                        <label>E-wallet System</label>
+                        <i class="ti ti-wallet"></i>
+                    </li>
+                    <li class="pc-item pc-hasmenu">
+                        <a href="javascript:void(0);" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-wallet"></i></span>
+                            <span class="pc-mtext">E-wallet System</span>
+                            <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            @can('view e-wallets')
+                                <li class="pc-item">
+                                    <a href="{{ route('e-wallets.index') }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-wallet"></i></span>
+                                        <span class="pc-mtext">E-wallet</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            {{-- @can('load e-wallets')
+                                <li class="pc-item">
+                                    <a href="{{ route('e-wallets.load', ['user' => auth()->user()->id]) }}" class="pc-link">
+                                        <span class="pc-micon"><i class="ti ti-wallet"></i></span>
+                                        <span class="pc-mtext">Load E-wallet</span>
+                                    </a>
+                                </li>
+                            @endcan --}}
+
+                            {{-- @can('view load transactions')
+                            <li class="pc-item">
+                                <a href="{{ route('e-wallets.load-transactions') }}" class="pc-link">
+                                    <span class="pc-micon"><i class="ti ti-package"></i></span>
+                                    <span class="pc-mtext">Load Transactions</span>
+                                </a>
+                            </li>
+                        @endcan --}}
+                        </ul>
+                    </li>
+                @endcanany
+
+                @can('view e-wallet balance')
+                <li class="pc-item pc-caption">
+                    <label>Payments</label>
+                    <i class="ti ti-wallet"></i>
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="javascript:void(0);" class="pc-link">
+                        <span class="pc-micon"><i class="ti ti-wallet"></i></span>
+                        <span class="pc-mtext">E-wallet</span>
+                        <span class="pc-arrow"><i class="ti ti-chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        @can('pay via e-wallets')
+                            <li class="pc-item">
+                                <a href="{{ route('e-walletpay.index') }}" class="pc-link">
+                                    <span class="pc-micon"><i class="ti ti-wallet"></i></span>
+                                    <span class="pc-mtext">Scan to Pay</span>
+                                </a>
+                            </li>
+                        @endcan
+                    @endcan           
+
                 <!-- Sidebar Footer Card -->
                 <div class="card text-center">
                     <div class="card-body">
-                        <img src="{{ asset('admin_assets/images/img-navbar-card.png') }}" alt="images" class="img-fluid mb-2">
+                        <img src="{{ asset('admin_assets/images/img-navbar-card.png') }}" alt="images"
+                            class="img-fluid mb-2">
                         <h5>Template Made by</h5>
                         <p>JackDev31🧡</p>
                     </div>

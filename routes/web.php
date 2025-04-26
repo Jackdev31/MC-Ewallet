@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CashierSaleController;
+use App\Http\Controllers\EwalletController;
+use App\Http\Controllers\EwalletPayController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
@@ -146,12 +148,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 
-    
+
     Route::get('/cashierpos', [CashierSaleController::class, 'index'])->name('cashierpos.index');
 
     Route::post('/store-cashier-sales', [CashierSaleController::class, 'store'])->name('store.cashier.sales');
 
     Route::get('/sales-transactions', [CashierSaleController::class, 'sales'])->name('sales.transactions');
+
+    Route::get('/e-wallets', [EwalletController::class, 'index'])->name('e-wallets.index');
+
+    Route::get('/e-wallets/{user}/load', [EwalletController::class, 'loadForm'])->name('e-wallets.load'); // For loading credits
+
+    Route::post('/e-wallets/{user}/load', [EwalletController::class, 'store'])->name('e-wallets.storeCredits'); // Submit load credits
+
+    Route::get('/e-wallets/{user}/edit', [EwalletController::class, 'edit'])->name('e-wallets.edit');
+
+    Route::put('/e-wallets/{user}', [EwalletController::class, 'update'])->name('e-wallets.update');
+
+    Route::get('/e-walletpay', [EwalletPayController::class, 'index'])->name('e-walletpay.index');
 
 
 });
